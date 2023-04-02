@@ -1,0 +1,10 @@
+CC = gcc
+CFLAGS = -Wall
+
+all: right_tree_example
+
+right_tree_example: right_tree_example.c
+$(CC) $(CFLAGS) -o $@ $^
+
+clean:
+rm -f right_tree_example
