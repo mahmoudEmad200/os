@@ -1,0 +1,173 @@
+Os report : 
+Question number 1 :
+To create a process hierarchy where the left side of the tree is always the same, and the right side has a parametric depth given by the value of N. the code :
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+void create_right_tree(int depth) {
+    if (depth == 0) {
+        return;
+    }
+
+    pid_t right_child = fork();
+    if (right_child == 0) {
+        create_right_tree(depth - 1);
+    } else {
+        wait(NULL);
+    }
+}
+
+int main() {
+    int N = 3; // Modify this value to change the depth of the right part of the tree
+    pid_t p1, p2, p3;
+
+    p1 = getpid();
+
+    // Create P2 and P3 by forking P1
+    p2 = fork();
+    if (p2 == 0) {
+        // P2 code
+        pid_t p4, p5;
+        p4 = fork();
+        if (p4 == 0) {
+            // P4 code
+        } else {
+            p5 = fork();
+            if (p5 == 0) {
+                // P5 code
+            }
+        }
+    } else {
+        p3 = fork();
+        if (p3 == 0) {
+            // P3 code
+            create_right_tree(N);
+        }
+    }
+
+    // Wait for all child processes to finish
+    if (getpid() == p1) {
+        wait(NULL);
+    } else {
+        return 0;
+    }
+
+    return 0;
+}
+_______________________________________________
+In this modified version of the code, a recursive function create_right_tree has been added. This function takes an integer argument depth, which determines the depth of the right side of the process tree. The function forks a child process, and if it's in the child process, it recursively calls itself with depth - 1. The parent process waits for the child process to finish using wait(NULL).
+
+In the main function, the left side of the tree is created the same way as before. The right side of the tree is created by calling create_right_tree(N) inside the P3 code block, where N is the depth of the right part of the tree. Change the value of N to create a process tree with different depths on the right side.
+
+To compile and run the code, save it to a file named parametric_process_tree.c:
+
+gcc -o parametric_process_tree parametric_process_tree.c
+
+_______________________________________________
+Question number 2 :
+parent processes depends on the value of N, where N represents the depth of the right part of the tree. The left part of the tree is fixed with three parent processes (P1, P2, and P3).
+
+Let's break down the number of parent processes on the right side of the tree:
+
+For N = 1, there is 1 parent process (P3).
+For N = 2, there are 2 parent processes (P3 and its child).
+For N = 3, there are 3 parent processes (P3 and its two children).
+And so on...
+The pattern shows that for each level of depth N, the number of parent processes on the right side of the tree is equal to N.
+
+Thus, the total number of parent processes in the tree can be calculated as follows:
+
+Total parent processes = Left side parent processes + Right side parent processes
+
+Considering that the left side always has 3 parent processes (P1, P2, and P3):
+
+Total parent processes = 3 + N.
+_______________________________________________
+Question number 3 : 
+To extend the existing solution to adjust the depths of the left subtrees, you can modify the code to add another recursive function to create the left subtree based on the value of M.
+
+The code : 
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+void create_right_tree(int depth) {
+    if (depth == 0) {
+        return;
+    }
+
+    pid_t right_child = fork();
+    if (right_child == 0) {
+        create_right_tree(depth - 1);
+    } else {
+        wait(NULL);
+    }
+}
+
+void create_left_tree(int depth) {
+    if (depth == 0) {
+        return;
+    }
+
+    pid_t left_child = fork();
+    if (left_child == 0) {
+        create_left_tree(depth - 1);
+    } else {
+        wait(NULL);
+    }
+}
+
+int main() {
+    int N = 2; // Modify this value to change the depth of the right part of the tree
+    int M = 3; // Modify this value to change the depth of the left part of the tree
+    pid_t p1, p2, p3;
+
+    p1 = getpid();
+
+    // Create P2 and P3 by forking P1
+    p2 = fork();
+    if (p2 == 0) {
+        // P2 code
+        create_left_tree(M);
+    } else {
+        p3 = fork();
+        if (p3 == 0) {
+            // P3 code
+            create_right_tree(N);
+        }
+    }
+
+    // Wait for all child processes to finish
+    if (getpid() == p1) {
+        wait(NULL);
+    } else {
+        return 0;
+    }
+
+    return 0;
+}
+_______________________________________________
+
+
+
+
+
+
+n this modified version of the code, a new recursive function create_left_tree has been added. This function is similar to the create_right_tree function, but it's called inside the P2 code block. The left part of the tree is created by calling create_left_tree(M) inside the P2 code block, where M is the depth of the left part of the tree. Change the value of M to create a process tree with different depths on the left side.
+To compile and run the code, save it to a file named extended_process_tree.c:
+
+gcc -o extended_process_tree extended_process_tree.c
+./extended_process_tree
+_______________________________________________question number 4 :
+To derive an expression for the number of parent processes depending on N and M values, consider the following:
+For the right side of the tree, the number of parent processes is N, as derived in the previous response.
+For the left side of the tree, the number of parent processes follows the same pattern, so it's equal to M.
+Since P1 is also a parent process, we add 1 to the total parent processes.
+So, the expression for the total number of parent processes in the process hierarchy, depending on the values of N and M, is:
+
+Total parent processes = 1 (P1) + M (left side) + N (right side).
+_______________________________________________
+That is a full description of the questions with the code .
