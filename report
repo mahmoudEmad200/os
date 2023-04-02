@@ -86,7 +86,8 @@ Considering that the left side always has 3 parent processes (P1, P2, and P3):
 Total parent processes = 3 + N.
 _______________________________________________
 Question number 3 : 
-To extend the existing solution to adjust the depths of the left subtrees, you can modify the code to add another recursive function to create the left subtree based on the value of M.
+To extend the existing solution to adjust the depths of the left subtrees,
+you can modify the code to add another recursive function to create the left subtree based on the value of M.
 
 The code : 
 #include <stdio.h>
@@ -156,7 +157,10 @@ _______________________________________________
 
 
 
-n this modified version of the code, a new recursive function create_left_tree has been added. This function is similar to the create_right_tree function, but it's called inside the P2 code block. The left part of the tree is created by calling create_left_tree(M) inside the P2 code block, where M is the depth of the left part of the tree. Change the value of M to create a process tree with different depths on the left side.
+n this modified version of the code, a new recursive function create_left_tree has been added. 
+This function is similar to the create_right_tree function, but it's called inside the P2 code block.
+The left part of the tree is created by calling create_left_tree(M) inside the P2 code block,
+where M is the depth of the left part of the tree. Change the value of M to create a process tree with different depths on the left side.
 To compile and run the code, save it to a file named extended_process_tree.c:
 
 gcc -o extended_process_tree extended_process_tree.c
