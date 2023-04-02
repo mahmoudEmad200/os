@@ -1,0 +1,14 @@
+CC = gcc
+CFLAGS = -Wall
+
+all: left_right_tree_process_hierarchy
+
+left_right_tree_process_hierarchy: left_right_tree_process_hierarchy.c
+$(CC) $(CFLAGS) -o $@ $^
+
+clean:
+rm -f left_right_tree_process_hierarchy
+
+
+make
+./left_right_tree_process_hierarchy
