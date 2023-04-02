@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+void create_right_tree(int depth) {
+    if (depth == 0) {
+        return;
+    }
+
+    pid_t right_child = fork();
+    if (right_child == 0) {
+        printf("Child PID: %d, Parent PID: %d\n", getpid(), getppid());
+        create_right_tree(depth - 1);
+    } else {
+        wait(NULL);
+    }
+}
+
+void create_left_tree(int depth) {
+    if (depth == 0) {
+        return;
+    }
+
+    pid_t left_child = fork();
+    if (left_child == 0) {
+        printf("Child PID: %d, Parent PID: %d\n", getpid(), getppid());
+        create_left_tree(depth - 1);
+    } else {
+        wait(NULL);
+    }
+}
+
+int main() {
+    int N = 2; // Modify this value to change the depth of the right part of the tree
+    int M = 3; // Modify this value to change the depth of the left part of the tree
+    pid_t p1, p2, p3;
+
+    p1 = getpid();
+
+    // Create P2 and P3 by forking P1
+    p2 = fork();
+    if (p2 == 0) {
+        // P2 code
+        printf("Child PID: %d, Parent PID: %d\n", getpid(), getppid());
+        create_left_tree(M);
+    } else {
+        p3 = fork();
+        if (p3 == 0) {
+            // P3 code
+            printf("Child PID: %d, Parent PID: %d\n", getpid(), getppid());
+            create_right_tree(N);
+        }
+    }
+
+    // Wait for all child processes to finish
+    if (getpid() == p1) {
+        wait(NULL);
+    } else {
+        return 0;
+    }
+
+    return 0;
+}
